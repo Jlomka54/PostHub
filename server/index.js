@@ -9,12 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/", authRoutes);
+const PORT = process.env.PORT || 3001;
+
+app.use("/api/auth", authRoutes);
 async function start() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    app.listen(5000, () => {
-      console.log(`Server start on port 5000`);
+    app.listen(PORT, () => {
+      console.log(`Server start on port ${PORT}`);
     });
   } catch (error) {
     console.log(error);

@@ -4,9 +4,16 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const username = req.body.username || req.body.userName;
+    const { password } = req.body;
 
-    const isUsed = await User.findOne({ username });
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "Username and password are required",
+      });
+    }
+
+    const isUsed = await User.findOne({ userName: username });
     if (isUsed) {
       return res.status(400).json({
         message: "This username is already taken",
@@ -18,7 +25,7 @@ export const register = async (req, res) => {
     const hash = bcrypt.hashSync(password, salt);
 
     const newUser = new User({
-      username,
+      userName: username,
       password: hash,
     });
     await newUser.save();
@@ -36,9 +43,16 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const username = req.body.username || req.body.userName;
+    const { password } = req.body;
 
-    const user = await User.findOne({ username });
+    if (!username || !password) {
+      return res.status(400).json({
+        message: "Username and password are required",
+      });
+    }
+
+    const user = await User.findOne({ userName: username });
 
     if (!user) {
       return res.status(400).json({

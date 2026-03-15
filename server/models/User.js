@@ -1,14 +1,15 @@
 import mongoos from "mongoose";
 const UserSchema = new mongoos.Schema(
   {
-    username: {
+    userName: {
       type: String,
-      reqrired: true,
+      required: true,
       unique: true,
+      alias: "username",
     },
     password: {
       type: String,
-      reqrired: true,
+      required: true,
     },
     posts: [
       {
@@ -18,7 +19,7 @@ const UserSchema = new mongoos.Schema(
     ],
   },
   {
-    Timestamp: true,
+    timestamps: true,
   },
 );
 
