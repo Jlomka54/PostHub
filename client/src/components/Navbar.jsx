@@ -5,7 +5,7 @@ export const Navbar = () => {
     color: "white",
   };
 
-  const isAuth = true;
+  const isAuth = false;
 
   return (
     <div className="flex items-center justify-between py-4">
