@@ -44,7 +44,7 @@ export const Navbar = () => {
         </ul>
       )}
 
-      <div className="flex items-center justify-center px-4 py-2 rounded-sm bg-gray-600 px-4 text-xs text-white">
+      <div className="flex items-center justify-center px-4 py-2 rounded-sm bg-gray-600 text-xs text-white">
         {isAuth ? <button>Logout</button> : <Link to={"/login"}>Login</Link>}
       </div>
     </div>
