@@ -1,11 +1,11 @@
 import mongoos from "mongoose";
 const UserSchema = new mongoos.Schema(
   {
-    userName: {
+    username: {
       type: String,
       required: true,
       unique: true,
-      alias: "username",
+      trim: true,
     },
     password: {
       type: String,
@@ -22,5 +22,16 @@ const UserSchema = new mongoos.Schema(
     timestamps: true,
   },
 );
+
+UserSchema.virtual("userName")
+  .get(function () {
+    return this.username;
+  })
+  .set(function (value) {
+    this.username = value;
+  });
+
+UserSchema.set("toJSON", { virtuals: true });
+UserSchema.set("toObject", { virtuals: true });
 
 export default mongoos.model("User", UserSchema);

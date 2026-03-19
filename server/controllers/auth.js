@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
-    const username = req.body.username || req.body.userName;
-    const { password } = req.body;
+    const username = (req.body.username || req.body.userName || "").trim();
+    const password = req.body.password || "";
 
     if (!username || !password) {
       return res.status(400).json({
@@ -13,9 +13,11 @@ export const register = async (req, res) => {
       });
     }
 
-    const isUsed = await User.findOne({ userName: username });
+    const isUsed = await User.findOne({
+      $or: [{ username }, { userName: username }],
+    });
     if (isUsed) {
-      return res.status(400).json({
+      return res.status(409).json({
         message: "This username is already taken",
       });
     }
@@ -25,26 +27,40 @@ export const register = async (req, res) => {
     const hash = bcrypt.hashSync(password, salt);
 
     const newUser = new User({
-      userName: username,
+      username,
       password: hash,
     });
+    const token = jwt.sign(
+      {
+        id: newUser._id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "30d" },
+    );
     await newUser.save();
 
     return res.status(201).json({
-      newUser,
+      user: newUser,
+      token,
       message: "Registration was successful",
     });
   } catch (error) {
-    return res.status(400).json({
-      message: error.message,
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "This username is already taken",
+      });
+    }
+
+    return res.status(500).json({
+      message: "Registration failed",
     });
   }
 };
 
 export const login = async (req, res) => {
   try {
-    const username = req.body.username || req.body.userName;
-    const { password } = req.body;
+    const username = (req.body.username || req.body.userName || "").trim();
+    const password = req.body.password || "";
 
     if (!username || !password) {
       return res.status(400).json({
@@ -52,7 +68,9 @@ export const login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ userName: username });
+    const user = await User.findOne({
+      $or: [{ username }, { userName: username }],
+    });
 
     if (!user) {
       return res.status(400).json({
@@ -77,8 +95,8 @@ export const login = async (req, res) => {
       .status(201)
       .json({ user, token, message: "You have successfully logged in" });
   } catch (error) {
-    return res.status(400).json({
-      message: error.message,
+    return res.status(500).json({
+      message: "Login failed",
     });
   }
 };
