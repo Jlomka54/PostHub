@@ -9,7 +9,15 @@ import { LoginPage } from "./pages/LoginPage.jsx";
 import { EditPostPage } from "./pages/EditPostPage.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getMe } from "./store/auth/authOperations.js";
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMe());
+  }, [dispatch]);
   return (
     <Layout>
       <Routes>

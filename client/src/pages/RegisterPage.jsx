@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { registerUser } from "../store/auth/authOperations";
 import { toast } from "react-toastify";
 
@@ -9,7 +9,7 @@ export const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const { isLoading, status } = useSelector((state) => state.auth);
-  console.log(status);
+  const isAuth = useSelector((state) => Boolean(state.auth.token));
 
   useEffect(() => {
     if (status) {
@@ -17,19 +17,24 @@ export const RegisterPage = () => {
     }
   }, [status]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const resultAction = await dispatch(registerUser({ username, password }));
-
-    if (registerUser.fulfilled.match(resultAction)) {
+  const handleSubmit = async () => {
+    try {
+      await dispatch(registerUser({ username, password }));
       setPassword("");
       setUsername("");
+    } catch (error) {
+      console.log(error);
     }
   };
+  if (isAuth) {
+    return <Navigate to="/" />;
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="w-1/4 h-60 mx-auto mt-40">
+    <form
+      onSubmit={(e) => e.preventDefault()}
+      className="w-1/4 h-60 mx-auto mt-40"
+    >
       <h1 className="text-jg text-white text-center mb-2">Register</h1>
       <label className=" text-sx text-gray-400">
         Username:
@@ -67,7 +72,7 @@ export const RegisterPage = () => {
         <button
           type="submit"
           className="bg-gray-500 text=xs text-white px-4 py-2 rounded-md"
-          disabled={isLoading}
+          onClick={handleSubmit}
         >
           {isLoading ? "Loading..." : "Register"}
         </button>
