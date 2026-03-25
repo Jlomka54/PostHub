@@ -7,15 +7,17 @@ export const createPost = async (req, res) => {
   try {
     const { title, text } = req.body;
     const user = await User.findById(req.userId);
-    if (req.files) {
-      let fileName = Date.now().toString() + req.files.image.name;
+    const image = req.files?.image;
+
+    if (image) {
+      let fileName = Date.now().toString() + image.name;
       const __dirname = dirname(fileURLToPath(import.meta.url));
-      req.files.image.mv(path.join(__dirname, "..", "uploads", fileName));
+      await image.mv(path.join(__dirname, "..", "uploads", fileName));
       const post = new Post({
         username: user.username,
         title,
         text,
-        imageUrl: fileName,
+        imgUrl: fileName,
         author: req.userId,
       });
       await post.save();

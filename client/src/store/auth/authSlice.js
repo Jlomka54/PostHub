@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMe, loginUser, registerUser } from "./authOperations";
+import { getMe, loginUser, registerUser } from "./authOperations.js";
 const initialState = {
   user: null,
   token: null,
@@ -7,7 +7,7 @@ const initialState = {
   status: null,
 };
 
-export const authslice = createSlice({
+export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
@@ -64,7 +64,7 @@ export const authslice = createSlice({
   },
 });
 
-export const { logout } = authslice.actions;
+export const { logout } = authSlice.actions;
 export const checkAuth = (state) => Boolean(state.auth.token);
 
-export default authslice.reducer;
+export default authSlice.reducer;
