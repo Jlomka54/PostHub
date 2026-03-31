@@ -18,3 +18,17 @@ export const createPost = createAsyncThunk(
     }
   },
 );
+
+export const getAllPosts = createAsyncThunk(
+  "post/getAllPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.get("/posts");
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Failed to fetch posts" },
+      );
+    }
+  },
+);

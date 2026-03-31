@@ -47,7 +47,7 @@ export const AddPostsPage = () => {
         {image && (
           <img
             src={URL.createObjectURL(image)}
-            alt="Preview"
+            alt={image.name}
             className="max-w-full max-h-full object-contain"
           />
         )}
