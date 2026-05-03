@@ -6,7 +6,7 @@ import "moment/locale/ru";
 export const PostItem = ({ post }) => {
   if (!post) {
     return (
-      <div className="text-white text-center">No post data available.</div>
+      <div className="text-center text-white">No post data available.</div>
     );
   }
 
@@ -26,27 +26,27 @@ export const PostItem = ({ post }) => {
           <img
             src={`http://localhost:3002/${post.imgUrl}`}
             alt={post.title}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover"
           />
         )}
       </div>
-      <div className="flex justify-between items-center pt-2">
-        <div className="text-xs text-white opacity-50 font-bold">
+      <div className="flex items-center justify-between pt-2">
+        <div className="text-xs font-bold text-white opacity-50">
           {post.username}
         </div>
-        <div className="text-xs text-white opacity-50 font-bold">
+        <div className="text-xs font-bold text-white opacity-50">
           {formattedDate}
         </div>
       </div>
-      <div className="text-sm text-white opacity-70 pt-2">{post.title}</div>
-      <p className="text-white opacity-60 text-xs py-4 ">{post.text}</p>
+      <div className="pt-2 text-sm text-white opacity-70">{post.title}</div>
+      <p className="py-4 text-xs text-white opacity-60">{post.text}</p>
 
-      <div className="flex gap-3 items-center">
-        <button className="flex items-center justify-center  gap-2 text-xs text-white opacity-50">
+      <div className="flex items-center gap-3">
+        <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
           <AiFillEye />
           <span>{post.views || 0}</span>
         </button>
-        <button className="flex items-center justify-center  gap-2 text-xs text-white opacity-50">
+        <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
           <AiOutlineMessage />
           <span>{post.comments?.length || 0}</span>
         </button>

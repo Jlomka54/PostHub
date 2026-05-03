@@ -57,3 +57,16 @@ export const getAll = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getPostById = async (req, res) => {
+  try {
+    const post = await Post.findOneAndUpdate(
+      { _id: req.params.id },
+      { $inc: { views: 1 } },
+      { new: true },
+    );
+    res.json({ post });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

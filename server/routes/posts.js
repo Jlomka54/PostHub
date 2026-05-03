@@ -1,12 +1,11 @@
 import { Router } from "express";
 import { ckeckToken } from "../middlewares/checkToken.js";
-import { createPost, getAll } from "../controllers/posts.js";
+import { createPost, getAll, getPostById } from "../controllers/posts.js";
 
 const router = new Router();
 
-//Create post
 router.post("/", ckeckToken, createPost);
-
 router.get("/", getAll);
+router.get("/:id", getPostById);
 
 export default router;
