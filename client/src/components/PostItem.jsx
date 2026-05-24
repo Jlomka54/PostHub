@@ -1,6 +1,7 @@
 import React from "react";
 import { AiFillEye, AiOutlineMessage } from "react-icons/ai";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 export const PostItem = ({ post }) => {
   if (!post) {
@@ -41,9 +42,12 @@ export const PostItem = ({ post }) => {
           {formattedDate}
         </div>
       </div>
-      <div className="pt-2 text-lg font-bold text-white opacity-70">
+      <Link
+        to={`/${post._id}`}
+        className="pt-2 text-lg font-bold text-white opacity-70 hover:opacity-100"
+      >
         {post.title}
-      </div>
+      </Link>
       <p className="py-4 text-base text-white opacity-60">{post.text}</p>
 
       <div className="flex items-center gap-3 justify-between">
