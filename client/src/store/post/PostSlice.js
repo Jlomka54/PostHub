@@ -4,6 +4,7 @@ import {
   deletePost,
   getAllPosts,
   getPostById,
+  updatePost,
 } from "./PostOperations.js";
 
 const initialState = {
@@ -59,6 +60,18 @@ export const PostSlice = createSlice({
       state.posts = state.posts.filter((post) => post._id !== action.payload);
     });
     builder.addCase(deletePost.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(updatePost.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updatePost.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.posts = state.posts.map((post) =>
+        post._id === action.payload._id ? action.payload : post,
+      );
+    });
+    builder.addCase(updatePost.rejected, (state) => {
       state.isLoading = false;
     });
   },

@@ -85,3 +85,30 @@ export const removePost = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updatePost = async (req, res) => {
+  try {
+    const { title, text, id } = req.body;
+    const image = req.files?.image;
+
+    const post = await Post.findById(id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (image) {
+      let fileName = Date.now().toString() + image.name;
+      const __dirname = dirname(fileURLToPath(import.meta.url));
+      await image.mv(path.join(__dirname, "..", "uploads", fileName));
+      post.imgUrl = fileName || "";
+    }
+
+    post.title = title;
+    post.text = text;
+
+    await post.save();
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

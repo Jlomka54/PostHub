@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axiosInstance from "../../utils/axios";
+import { axiosInstance } from "../../utils/axios";
 
 export const createPost = createAsyncThunk(
   "post/createPost",
@@ -56,6 +56,20 @@ export const deletePost = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data || { message: "Failed to delete post" },
+      );
+    }
+  },
+);
+
+export const updatePost = createAsyncThunk(
+  "post/updatePost",
+  async ({ updated }, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.put(`/posts/${updated.id}`, updated);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Failed to update post" },
       );
     }
   },

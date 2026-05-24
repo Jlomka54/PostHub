@@ -42,16 +42,16 @@ export const PostItem = ({ post }) => {
           {formattedDate}
         </div>
       </div>
-      <Link
+      <p
         to={`/${post._id}`}
-        className="pt-2 text-lg font-bold text-white opacity-70 hover:opacity-100"
+        className="pt-2 text-lg font-bold text-white opacity-70"
       >
         {post.title}
-      </Link>
+      </p>
       <p className="py-4 text-base text-white opacity-60">{post.text}</p>
 
       <div className="flex items-center gap-3 justify-between">
-        <div className="flex mt-4 gap-3">
+        <div className="flex  gap-3">
           <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
             <AiFillEye />
             <span>{post.views || 0}</span>
