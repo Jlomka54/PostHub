@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createPost, getAllPosts, getPostById } from "./PostOperations.js";
+import {
+  createPost,
+  deletePost,
+  getAllPosts,
+  getPostById,
+} from "./PostOperations.js";
 
 const initialState = {
   posts: [],
@@ -45,6 +50,16 @@ export const PostSlice = createSlice({
     builder.addCase(getPostById.rejected, (state) => {
       state.isLoading = false;
       state.currentPost = null;
+    });
+    builder.addCase(deletePost.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deletePost.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.posts = state.posts.filter((post) => post._id !== action.payload);
+    });
+    builder.addCase(deletePost.rejected, (state) => {
+      state.isLoading = false;
     });
   },
 });

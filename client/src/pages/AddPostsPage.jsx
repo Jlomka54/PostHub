@@ -61,7 +61,7 @@ export const AddPostsPage = () => {
             setTitle(e.target.value);
           }}
           name="title"
-          className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-800"
+          className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-lg outline-none placeholder:text-gray-800"
           placeholder="Enter post title"
         />
       </label>
@@ -73,7 +73,7 @@ export const AddPostsPage = () => {
           onChange={(e) => {
             setText(e.target.value);
           }}
-          className="mt-1 text-black w-full rounded-lg resize-none h-24 bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-800"
+          className="mt-1 text-black w-full rounded-lg resize-none h-24 bg-gray-400 border py-1 px-2 text-lg outline-none placeholder:text-gray-800"
           placeholder="Enter post description"
         />
       </label>

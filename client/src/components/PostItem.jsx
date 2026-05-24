@@ -20,12 +20,16 @@ export const PostItem = ({ post }) => {
 
   return (
     <div className="flex flex-col basis-1/4 flex-grow">
-      <div className={post.imgUrl ? "flex rounded-sm h-80" : "flex rounded-sm"}>
+      <div
+        className={
+          post.imgUrl ? "flex rounded-sm h-80 bg-black/20" : "flex rounded-sm"
+        }
+      >
         {post.imgUrl && (
           <img
             src={`http://localhost:3002/${post.imgUrl}`}
             alt={post.title}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain"
           />
         )}
       </div>
@@ -37,18 +41,22 @@ export const PostItem = ({ post }) => {
           {formattedDate}
         </div>
       </div>
-      <div className="pt-2 text-sm text-white opacity-70">{post.title}</div>
-      <p className="py-4 text-xs text-white opacity-60">{post.text}</p>
+      <div className="pt-2 text-lg font-bold text-white opacity-70">
+        {post.title}
+      </div>
+      <p className="py-4 text-base text-white opacity-60">{post.text}</p>
 
-      <div className="flex items-center gap-3">
-        <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-          <AiFillEye />
-          <span>{post.views || 0}</span>
-        </button>
-        <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-          <AiOutlineMessage />
-          <span>{post.comments?.length || 0}</span>
-        </button>
+      <div className="flex items-center gap-3 justify-between">
+        <div className="flex mt-4 gap-3">
+          <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+            <AiFillEye />
+            <span>{post.views || 0}</span>
+          </button>
+          <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+            <AiOutlineMessage />
+            <span>{post.comments?.length || 0}</span>
+          </button>
+        </div>
       </div>
     </div>
   );

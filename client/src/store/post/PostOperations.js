@@ -46,3 +46,17 @@ export const getPostById = createAsyncThunk(
     }
   },
 );
+
+export const deletePost = createAsyncThunk(
+  "post/deletePost",
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await axiosInstance.delete(`/posts/${id}`, id);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Failed to delete post" },
+      );
+    }
+  },
+);
