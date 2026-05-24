@@ -1,7 +1,6 @@
 import React from "react";
 import { AiFillEye, AiOutlineMessage } from "react-icons/ai";
 import moment from "moment";
-import "moment/locale/ru";
 
 export const PostItem = ({ post }) => {
   if (!post) {
@@ -11,11 +10,11 @@ export const PostItem = ({ post }) => {
   }
 
   const formattedDate = post.createdAt
-    ? moment(post.createdAt).locale("ru").calendar(undefined, {
-        sameDay: "[Сегодня в] HH:mm",
-        lastDay: "[Вчера в] HH:mm",
-        lastWeek: "dddd [в] HH:mm",
-        sameElse: "D MMMM YYYY [в] HH:mm",
+    ? moment(post.createdAt).locale("en").calendar(undefined, {
+        sameDay: "[Today at] HH:mm",
+        lastDay: "[Yesterday at] HH:mm",
+        lastWeek: "dddd [at] HH:mm",
+        sameElse: "D MMMM YYYY [at] HH:mm",
       })
     : "";
 
