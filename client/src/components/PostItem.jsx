@@ -1,9 +1,15 @@
 import React from "react";
-import { AiFillEye, AiOutlineMessage } from "react-icons/ai";
+import { AiFillDelete, AiFillEye, AiOutlineMessage } from "react-icons/ai";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { deletePost } from "../store/post/PostOperations";
 
 export const PostItem = ({ post }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.auth.user);
+
   if (!post) {
     return (
       <div className="text-center text-white">No post data available.</div>
@@ -18,6 +24,15 @@ export const PostItem = ({ post }) => {
         sameElse: "D MMMM YYYY [at] HH:mm",
       })
     : "";
+  const authorId =
+    typeof post.author === "object" ? post.author?._id : post.author;
+  const currentUserId = currentUser?._id || currentUser?.id;
+  const isPostAuthor = authorId === currentUserId;
+
+  const deletePostHandler = async () => {
+    await dispatch(deletePost(post._id));
+    navigate("/posts");
+  };
 
   return (
     <div className="flex flex-col basis-1/4 flex-grow">
@@ -61,6 +76,16 @@ export const PostItem = ({ post }) => {
             <span>{post.comments?.length || 0}</span>
           </button>
         </div>
+        {isPostAuthor && (
+          <button
+            type="button"
+            onClick={deletePostHandler}
+            className="flex items-center justify-center gap-2 text-xs text-red-500 opacity-70 transition-opacity hover:opacity-100"
+          >
+            <AiFillDelete />
+            <span>Delete</span>
+          </button>
+        )}
       </div>
     </div>
   );

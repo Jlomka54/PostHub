@@ -8,6 +8,7 @@ export const PostPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { currentPost, isLoading } = useSelector((state) => state.posts);
+  const currentUser = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     if (id) {
@@ -23,6 +24,13 @@ export const PostPage = () => {
     return <div className="py-10 text-center text-white">Post not found.</div>;
   }
 
+  const authorId =
+    typeof currentPost.author === "object"
+      ? currentPost.author?._id
+      : currentPost.author;
+  const currentUserId = currentUser?._id || currentUser?.id;
+  const isPostAuthor = authorId === currentUserId;
+
   return (
     <div className="max-w-[900px] mx-auto py-10">
       <div className="flex items-center gap-3">
@@ -32,12 +40,14 @@ export const PostPage = () => {
         >
           Back to posts
         </Link>
-        <Link
-          to={`/${currentPost._id}/edit`}
-          className="inline-flex items-center rounded-sm bg-green-600 px-4 py-2 text-xs text-white"
-        >
-          Edit post
-        </Link>
+        {isPostAuthor && (
+          <Link
+            to={`/${currentPost._id}/edit`}
+            className="inline-flex items-center rounded-sm bg-green-600 px-4 py-2 text-xs text-white"
+          >
+            Edit post
+          </Link>
+        )}
       </div>
 
       <div className="py-8">

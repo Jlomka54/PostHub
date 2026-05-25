@@ -56,7 +56,7 @@ export const EditPostPage = () => {
   return (
     <form className="w-1/3 mx-auto py-10" onSubmit={(e) => e.preventDefault()}>
       <label className="text-gray-300 py-2 bg-gray-800 text-sx mt-2 flex items-center justify-center border-2   cursor-pointer">
-        Add images
+        Change image
         <input
           type="file"
           name="image"
@@ -84,7 +84,7 @@ export const EditPostPage = () => {
         )}
       </div>
       <label className=" text-xs text-white opacity-70">
-        Add title
+        Update title
         <input
           type="text"
           value={title}
@@ -97,7 +97,7 @@ export const EditPostPage = () => {
         />
       </label>
       <label className="text-xs text-white opacity-70">
-        Add description
+        Update description
         <textarea
           name="text"
           value={text}
@@ -113,7 +113,7 @@ export const EditPostPage = () => {
           className=" flex items-center text-xs bg-green-500 text-white py-2 px-4 rounded-sm mt-4"
           onClick={submitHandler}
         >
-          Add post
+          Update post
         </button>
         <button
           onClick={clearFormHandler}

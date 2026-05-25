@@ -51,8 +51,8 @@ export const deletePost = createAsyncThunk(
   "post/deletePost",
   async (id, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.delete(`/posts/${id}`, id);
-      return data;
+      await axiosInstance.delete(`/posts/${id}`);
+      return id;
     } catch (error) {
       return rejectWithValue(
         error.response?.data || { message: "Failed to delete post" },

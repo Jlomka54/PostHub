@@ -45,6 +45,15 @@ export const Navbar = () => {
           </li>
         </ul>
       )}
+      {!isAuth && (
+        <NavLink
+          to={"/"}
+          style={({ isActive }) => (isActive ? activeStiles : undefined)}
+          className="text-xs text-gray-400 hover:text-white"
+        >
+          Main
+        </NavLink>
+      )}
 
       <div className="flex items-center justify-center px-4 py-2 rounded-sm bg-gray-600 text-xs text-white">
         {isAuth ? (
