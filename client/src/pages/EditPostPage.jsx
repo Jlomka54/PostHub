@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../utils/axios";
+import { updatePost } from "../store/post/PostOperations";
 
 export const EditPostPage = () => {
   const [title, setTitle] = useState("");
@@ -18,7 +19,7 @@ export const EditPostPage = () => {
     const { data } = await axiosInstance.get(`/posts/${params.id}`);
     setTitle(data.post.title);
     setText(data.post.text);
-    setOldImage(data.post.imageUrl);
+    setOldImage(data.post.imgUrl);
   }, [params.id]);
 
   const submitHandler = async () => {
@@ -26,12 +27,14 @@ export const EditPostPage = () => {
       const updated = new FormData();
       updated.append("title", title);
       updated.append("text", text);
+      updated.append("id", params.id);
       if (newImage) {
         updated.append("image", newImage);
       }
 
-      await axiosInstance.put(`/posts/${params.id}`, updated);
-      navigate("/");
+      dispatch(updatePost(updated));
+
+      navigate("/posts");
     } catch (error) {
       console.error("Error submitting post:", error);
     }
@@ -48,7 +51,7 @@ export const EditPostPage = () => {
     if (params.id) {
       fetchPost();
     }
-  }, [params.id]);
+  }, [params.id, fetchPost]);
 
   return (
     <form className="w-1/3 mx-auto py-10" onSubmit={(e) => e.preventDefault()}>
@@ -67,8 +70,8 @@ export const EditPostPage = () => {
       <div className="flex flex-col object-cover gap-2">
         {oldImage && (
           <img
-            src={`http://localhost:3002/${oldImage} `}
-            alt={oldImage.name}
+            src={`http://localhost:3002/${oldImage}`}
+            alt={title}
             className="max-w-full max-h-full object-contain"
           />
         )}

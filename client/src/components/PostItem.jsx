@@ -42,12 +42,12 @@ export const PostItem = ({ post }) => {
           {formattedDate}
         </div>
       </div>
-      <p
+      <Link
         to={`/${post._id}`}
-        className="pt-2 text-lg font-bold text-white opacity-70"
+        className="pt-2 text-lg font-bold text-white opacity-70 hover:opacity-100 transition-opacity"
       >
         {post.title}
-      </p>
+      </Link>
       <p className="py-4 text-base text-white opacity-60">{post.text}</p>
 
       <div className="flex items-center gap-3 justify-between">

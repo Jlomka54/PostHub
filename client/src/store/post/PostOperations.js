@@ -63,9 +63,17 @@ export const deletePost = createAsyncThunk(
 
 export const updatePost = createAsyncThunk(
   "post/updatePost",
-  async ({ updated }, { rejectWithValue }) => {
+  async (updated, { rejectWithValue }) => {
     try {
-      const { data } = await axiosInstance.put(`/posts/${updated.id}`, updated);
+      const { data } = await axiosInstance.put(
+        `/posts/${updated.get("id")}`,
+        updated,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
       return data;
     } catch (error) {
       return rejectWithValue(
