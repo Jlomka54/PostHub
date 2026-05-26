@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getMe, login, register } from "../controllers/auth.js";
-import { ckeckToken } from "../middlewares/checkToken.js";
+import { checkToken } from "../middlewares/checkToken.js";
 
 const router = new Router();
 
@@ -11,6 +11,6 @@ router.post("/register", register);
 router.post("/login", login);
 
 //Get Me
-router.get("/me", ckeckToken, getMe);
+router.get("/me", checkToken, getMe);
 
 export default router;

@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { ckeckToken } from "../middlewares/checkToken.js";
+import { checkToken } from "../middlewares/checkToken.js";
+import { createComment } from "../controllers/comment.js";
 
 const router = new Router();
 
