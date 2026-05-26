@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createComment } from "./commentOperations";
+import { getPostById } from "../post/PostOperations";
 
 const initialState = {
   comments: [],
@@ -10,7 +11,11 @@ const initialState = {
 const commentsSlice = createSlice({
   name: "comments",
   initialState,
-  reducers: {},
+  reducers: {
+    setComments: (state, action) => {
+      state.comments = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(createComment.pending, (state) => {
       state.isLoading = true;
@@ -22,8 +27,19 @@ const commentsSlice = createSlice({
     builder.addCase(createComment.rejected, (state) => {
       state.isLoading = false;
     });
+    builder.addCase(getPostById.pending, (state) => {
+      state.comments = [];
+    });
+    builder.addCase(getPostById.fulfilled, (state, action) => {
+      state.comments = (action.payload?.comments || []).filter(
+        (comment) => typeof comment === "object",
+      );
+    });
+    builder.addCase(getPostById.rejected, (state) => {
+      state.comments = [];
+    });
   },
 });
 
-export const { setComments, setLoading, setStatus } = commentsSlice.actions;
+export const { setComments } = commentsSlice.actions;
 export default commentsSlice.reducer;

@@ -12,7 +12,7 @@ export const createComment = async (req, res) => {
 
     const newComment = new Comment({
       comment,
-      author: req.user.id,
+      author: req.userId,
       post: postId,
     });
     await newComment.save();
@@ -20,6 +20,7 @@ export const createComment = async (req, res) => {
     await Post.findByIdAndUpdate(postId, {
       $push: { comments: newComment._id },
     });
+    await newComment.populate("author", "username");
     res.status(201).json(newComment);
   } catch (err) {
     res.status(500).json({

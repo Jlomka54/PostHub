@@ -63,8 +63,14 @@ export const getPostById = async (req, res) => {
     const post = await Post.findOneAndUpdate(
       { _id: req.params.id },
       { $inc: { views: 1 } },
-      { new: true },
-    );
+      { returnDocument: "after" },
+    ).populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: "username",
+      },
+    });
     res.json({ post });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
