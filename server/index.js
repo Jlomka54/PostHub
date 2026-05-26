@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
+import commentRoutes from "./routes/comment.js";
 import User from "./models/User.js";
 import fileUpload from "express-fileupload";
 
@@ -24,6 +25,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
 
 async function start() {
   try {
