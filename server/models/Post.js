@@ -16,6 +16,10 @@ const PostSchema = new mongoos.Schema(
       type: String,
       default: "",
     },
+    imgPublicId: {
+      type: String,
+      default: "",
+    },
     views: {
       type: Number,
       default: 0,

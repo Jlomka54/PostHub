@@ -1,45 +1,53 @@
 import Post from "../models/Post.js";
 import User from "../models/User.js";
-import path, { dirname } from "path";
-import { fileURLToPath } from "url";
+import {
+  CloudinaryConfigError,
+  CloudinaryUploadError,
+  deleteImage,
+  uploadImage,
+} from "../utils/cloudinary.js";
 
 export const createPost = async (req, res) => {
   try {
     const { title, text } = req.body;
     const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const image = req.files?.image;
+    let uploadedImage = null;
 
     if (image) {
-      let fileName = Date.now().toString() + image.name;
-      const __dirname = dirname(fileURLToPath(import.meta.url));
-      await image.mv(path.join(__dirname, "..", "uploads", fileName));
-      const post = new Post({
-        username: user.username,
-        title,
-        text,
-        imgUrl: fileName,
-        author: req.userId,
-      });
-      await post.save();
-      await User.findByIdAndUpdate(req.userId, {
-        $push: { posts: post },
-      });
-      res.json(post);
-    } else {
-      const post = new Post({
-        username: user.username,
-        title,
-        text,
-        author: req.userId,
-      });
-      await post.save();
-      await User.findByIdAndUpdate(req.userId, {
-        $push: { posts: post },
-      });
-      res.json(post);
+      uploadedImage = await uploadImage(image);
     }
+
+    const post = new Post({
+      username: user.username,
+      title,
+      text,
+      imgUrl: uploadedImage?.url || "",
+      imgPublicId: uploadedImage?.publicId || "",
+      author: req.userId,
+    });
+
+    await post.save();
+    await User.findByIdAndUpdate(req.userId, {
+      $push: { posts: post },
+    });
+    res.json(post);
   } catch (error) {
     console.log(error);
+    if (error.message === "Only image files are allowed") {
+      return res.status(400).json({ message: error.message });
+    }
+    if (error instanceof CloudinaryConfigError) {
+      return res.status(500).json({ message: "Cloudinary is not configured" });
+    }
+    if (error instanceof CloudinaryUploadError) {
+      return res.status(502).json({ message: "Image upload failed" });
+    }
+
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -86,6 +94,7 @@ export const removePost = async (req, res) => {
     await User.findByIdAndUpdate(req.userId, {
       $pull: { posts: req.params.id },
     });
+    await deleteImage(post.imgPublicId);
     res.json({ message: "Post deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
@@ -103,10 +112,10 @@ export const updatePost = async (req, res) => {
     }
 
     if (image) {
-      let fileName = Date.now().toString() + image.name;
-      const __dirname = dirname(fileURLToPath(import.meta.url));
-      await image.mv(path.join(__dirname, "..", "uploads", fileName));
-      post.imgUrl = fileName || "";
+      const uploadedImage = await uploadImage(image);
+      await deleteImage(post.imgPublicId);
+      post.imgUrl = uploadedImage.url;
+      post.imgPublicId = uploadedImage.publicId;
     }
 
     post.title = title;
@@ -115,6 +124,16 @@ export const updatePost = async (req, res) => {
     await post.save();
     res.json(post);
   } catch (error) {
+    if (error.message === "Only image files are allowed") {
+      return res.status(400).json({ message: error.message });
+    }
+    if (error instanceof CloudinaryConfigError) {
+      return res.status(500).json({ message: "Cloudinary is not configured" });
+    }
+    if (error instanceof CloudinaryUploadError) {
+      return res.status(502).json({ message: "Image upload failed" });
+    }
+
     res.status(500).json({ message: "Internal server error" });
   }
 };

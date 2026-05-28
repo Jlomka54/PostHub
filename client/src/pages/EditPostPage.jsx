@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../utils/axios";
 import { updatePost } from "../store/post/PostOperations";
+import { getImageUrl } from "../utils/image";
 
 export const EditPostPage = () => {
   const [title, setTitle] = useState("");
@@ -70,7 +71,7 @@ export const EditPostPage = () => {
       <div className="flex flex-col object-cover gap-2">
         {oldImage && (
           <img
-            src={`http://localhost:3002/${oldImage}`}
+            src={getImageUrl(oldImage)}
             alt={title}
             className="max-w-full max-h-full object-contain"
           />

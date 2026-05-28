@@ -3,13 +3,16 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import fileUpload from "express-fileupload";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import commentRoutes from "./routes/comment.js";
 import User from "./models/User.js";
 
-dotenv.config();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 

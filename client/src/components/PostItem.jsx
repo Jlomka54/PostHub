@@ -4,6 +4,7 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { deletePost } from "../store/post/PostOperations";
+import { getImageUrl } from "../utils/image";
 
 export const PostItem = ({ post }) => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ export const PostItem = ({ post }) => {
       >
         {post.imgUrl && (
           <img
-            src={`http://localhost:3002/${post.imgUrl}`}
+            src={getImageUrl(post.imgUrl)}
             alt={post.title}
             className="h-full w-full object-contain"
           />
